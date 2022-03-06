@@ -7,11 +7,17 @@ public class PlayerMovenent : MonoBehaviour
 {
     Vector2 moveInput;
     Rigidbody2D rbd2;
+    Animator myAnimator;
+    CapsuleCollider2D myCapsuleCollider;
+
     [SerializeField] float moveSpeed = 10f;
+    [SerializeField] float jumpSpeed = 5f;
 
     void Start()
     {
         rbd2 = GetComponent<Rigidbody2D>();
+        myAnimator = GetComponent<Animator>();
+        myCapsuleCollider = GetComponent<CapsuleCollider2D>();
     }
 
     // Update is called once per frame
@@ -33,6 +39,25 @@ public class PlayerMovenent : MonoBehaviour
         // Vector2 playerVelocity = new Vector2(moveInput.x, 0f) * moveSpeed * Time.deltaTime;
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, rbd2.velocity.y);
         rbd2.velocity = playerVelocity;
+
+        // animate running
+        bool playerHasHorizontalSpeed = Mathf.Abs(rbd2.velocity.x) > Mathf.Epsilon;
+        myAnimator.SetBool("isRunning", playerHasHorizontalSpeed);
+    }
+
+
+    void OnJump(InputValue value)
+    {
+        if(!myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        {
+            // this means stop executing this method
+            return;
+        }
+        
+        else if(value.isPressed) // could be just 'else' or 'if'
+        {
+            rbd2.velocity += new Vector2(0f, jumpSpeed);
+        }
     }
 
     void FlipSprite()
