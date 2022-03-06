@@ -12,12 +12,14 @@ public class PlayerMovenent : MonoBehaviour
 
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpSpeed = 5f;
-
+    [SerializeField] float climbSpeed = 5f;
+    float gravityScaleAtStart;
     void Start()
     {
         rbd2 = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
         myCapsuleCollider = GetComponent<CapsuleCollider2D>();
+        gravityScaleAtStart = rbd2.gravityScale;
     }
 
     // Update is called once per frame
@@ -25,6 +27,7 @@ public class PlayerMovenent : MonoBehaviour
     {
         Run();
         FlipSprite();
+        ClimbLadder();
     }
 
     void OnMove(InputValue value)
@@ -35,8 +38,6 @@ public class PlayerMovenent : MonoBehaviour
 
     void Run()
     {
-        // Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, 0f);
-        // Vector2 playerVelocity = new Vector2(moveInput.x, 0f) * moveSpeed * Time.deltaTime;
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, rbd2.velocity.y);
         rbd2.velocity = playerVelocity;
 
@@ -63,10 +64,6 @@ public class PlayerMovenent : MonoBehaviour
     void FlipSprite()
     {
         bool playerHasHorizontalSpeed = Mathf.Abs(rbd2.velocity.x) > Mathf.Epsilon;
-        // Debug.Log("velocity: " + rbd2.velocity.x);
-        // Debug.Log("math--: " + Mathf.Abs(rbd2.velocity.x));
-        // Debug.Log(playerHasHorizontalSpeed);
-        // Debug.Log("Epsilon: " + Mathf.Epsilon);
 
         if(playerHasHorizontalSpeed)
         {
@@ -76,6 +73,31 @@ public class PlayerMovenent : MonoBehaviour
             transform.localScale = new Vector2(Mathf.Sign(rbd2.velocity.x), 1f);
             // Debug.Log("transform: " + transform.localScale);
         }
+    }
+
+    void ClimbLadder()
+    {
+        // check if it is where to climb or  not
+        if(!myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
+        {
+            rbd2.gravityScale = gravityScaleAtStart;
+            myAnimator.SetBool("isClimbing", false);
+            myAnimator.enabled = true;
+            return;
+        }
+
+        // make movement
+        Vector2 climbVelocity = new Vector2(rbd2.velocity.x, moveInput.y * climbSpeed);
+        rbd2.velocity = climbVelocity;
+
+        // set gravity while climbing
+        rbd2.gravityScale = 0f;
+
+        // animate climbing
+        bool playerHasVerticalSpeed = Mathf.Abs(rbd2.velocity.y * climbSpeed) > Mathf.Epsilon;
+        myAnimator.SetBool("isClimbing", playerHasVerticalSpeed);
+        // to freeze animation if no velocity during the climbing
+        myAnimator.enabled = playerHasVerticalSpeed;
     }
 }
 
