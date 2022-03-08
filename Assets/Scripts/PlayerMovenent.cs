@@ -8,7 +8,8 @@ public class PlayerMovenent : MonoBehaviour
     Vector2 moveInput;
     Rigidbody2D rbd2;
     Animator myAnimator;
-    CapsuleCollider2D myCapsuleCollider;
+    CapsuleCollider2D myBodyCollider;
+    BoxCollider2D myFeetCollider;
 
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpSpeed = 5f;
@@ -18,7 +19,8 @@ public class PlayerMovenent : MonoBehaviour
     {
         rbd2 = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
-        myCapsuleCollider = GetComponent<CapsuleCollider2D>();
+        myBodyCollider = GetComponent<CapsuleCollider2D>();
+        myFeetCollider = GetComponent<BoxCollider2D>();
         gravityScaleAtStart = rbd2.gravityScale;
     }
 
@@ -49,7 +51,7 @@ public class PlayerMovenent : MonoBehaviour
 
     void OnJump(InputValue value)
     {
-        if(!myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
+        if(!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             // this means stop executing this method
             return;
@@ -78,7 +80,7 @@ public class PlayerMovenent : MonoBehaviour
     void ClimbLadder()
     {
         // check if it is where to climb or  not
-        if(!myCapsuleCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
+        if(!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Climbing")))
         {
             rbd2.gravityScale = gravityScaleAtStart;
             myAnimator.SetBool("isClimbing", false);
