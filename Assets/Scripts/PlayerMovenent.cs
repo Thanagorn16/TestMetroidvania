@@ -10,10 +10,12 @@ public class PlayerMovenent : MonoBehaviour
     Animator myAnimator;
     CapsuleCollider2D myBodyCollider;
     BoxCollider2D myFeetCollider;
+    PlayerInput myPlayerInput;
 
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpSpeed = 5f;
     [SerializeField] float climbSpeed = 5f;
+    // bool isAlive = true;
     float gravityScaleAtStart;
     void Start()
     {
@@ -21,6 +23,8 @@ public class PlayerMovenent : MonoBehaviour
         myAnimator = GetComponent<Animator>();
         myBodyCollider = GetComponent<CapsuleCollider2D>();
         myFeetCollider = GetComponent<BoxCollider2D>();
+        myPlayerInput = GetComponent<PlayerInput>();
+
         gravityScaleAtStart = rbd2.gravityScale;
     }
 
@@ -100,6 +104,21 @@ public class PlayerMovenent : MonoBehaviour
         myAnimator.SetBool("isClimbing", playerHasVerticalSpeed);
         // to freeze animation if no velocity during the climbing
         myAnimator.enabled = playerHasVerticalSpeed;
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        if(other.gameObject.tag == "Enemy")
+        {
+            Die();
+        }
+    }
+    void Die()
+    {
+        // InputSystem.DisableAllEnabledActions();
+
+        myPlayerInput.enabled = false; //disable player's input
+        
     }
 }
 
