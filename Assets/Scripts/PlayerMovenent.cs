@@ -11,10 +11,12 @@ public class PlayerMovenent : MonoBehaviour
     CapsuleCollider2D myBodyCollider;
     BoxCollider2D myFeetCollider;
     PlayerInput myPlayerInput;
+    
 
     [SerializeField] float moveSpeed = 10f;
     [SerializeField] float jumpSpeed = 5f;
     [SerializeField] float climbSpeed = 5f;
+    [SerializeField] Vector2 deathKick = new Vector2(10f, 10f);
     // bool isAlive = true;
     float gravityScaleAtStart;
     void Start()
@@ -118,7 +120,16 @@ public class PlayerMovenent : MonoBehaviour
         // InputSystem.DisableAllEnabledActions();
 
         myPlayerInput.enabled = false; //disable player's input
-        
+
+        myAnimator.SetTrigger("Dying"); //play dead animation 
+
+        rbd2.velocity = deathKick;
+
+        // get rid off the player
+        myBodyCollider.enabled = false;
+        myFeetCollider.enabled = false;
+        // gameObject.layer = 11;
+
     }
 }
 

@@ -20,6 +20,7 @@ public class EnemyMovement : MonoBehaviour
     void OnTriggerExit2D(Collider2D other)
     {
         moveSpeed = -moveSpeed;
+        // // Debug.Log(moveSpeed);
         FlipEnemyFacing();
     }
 
