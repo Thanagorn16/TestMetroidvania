@@ -137,7 +137,6 @@ public class PlayerMovenent : MonoBehaviour
         myBodyCollider.enabled = false;
         myFeetCollider.enabled = false;
         // gameObject.layer = 11;
-
     }
 }
 
