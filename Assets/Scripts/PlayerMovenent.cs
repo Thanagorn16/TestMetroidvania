@@ -11,6 +11,9 @@ public class PlayerMovenent : MonoBehaviour
     CapsuleCollider2D myBodyCollider;
     BoxCollider2D myFeetCollider;
     PlayerInput myPlayerInput;
+    [SerializeField] GameObject playerBullet;
+    [SerializeField] Transform playerGun;
+    
     
 
     [SerializeField] float moveSpeed = 10f;
@@ -54,6 +57,10 @@ public class PlayerMovenent : MonoBehaviour
         myAnimator.SetBool("isRunning", playerHasHorizontalSpeed);
     }
 
+    void OnFire(InputValue value)
+    {
+        Instantiate(playerBullet, playerGun.position, Quaternion.identity);
+    }
 
     void OnJump(InputValue value)
     {
@@ -108,9 +115,10 @@ public class PlayerMovenent : MonoBehaviour
         myAnimator.enabled = playerHasVerticalSpeed;
     }
 
+
     void OnCollisionEnter2D(Collision2D other)
     {
-        if(other.gameObject.tag == "Enemy")
+        if(other.gameObject.tag == "Enemy" || other.gameObject.tag == "Hazard")
         {
             Die();
         }

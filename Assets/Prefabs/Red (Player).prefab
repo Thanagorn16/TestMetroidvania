@@ -34,7 +34,8 @@ Transform:
   m_LocalPosition: {x: -7.5, y: -2.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2839534158543800189}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -97,7 +98,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -582473431
-  m_SortingLayer: 5
+  m_SortingLayer: 7
   m_SortingOrder: 0
   m_Sprite: {fileID: -1601145871, guid: 5063dad7181dcfa4896e65e2574a16d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -189,9 +190,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f9db4b4497f70943991e74020496ca0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerBullet: {fileID: 5950920887812421580, guid: 7fb604740a0a5434c82abd513e2c6c4b, type: 3}
+  playerGun: {fileID: 2839534158543800189}
   moveSpeed: 10
   jumpSpeed: 25
   climbSpeed: 5
+  deathKick: {x: 20, y: 20}
 --- !u!61 &1921892965917331709
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -201,7 +205,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 2489545252314313333}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 143b1dc60085bc443b4dbcc6d8b1608e, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -218,3 +222,34 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.44721556, y: 0.086771965}
   m_EdgeRadius: 0
+--- !u!1 &6739619499135308330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2839534158543800189}
+  m_Layer: 8
+  m_Name: Gun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2839534158543800189
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739619499135308330}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.27, y: -0.069, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2489545252314313338}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
