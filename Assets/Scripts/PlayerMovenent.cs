@@ -20,7 +20,7 @@ public class PlayerMovenent : MonoBehaviour
     [SerializeField] float jumpSpeed = 5f;
     [SerializeField] float climbSpeed = 5f;
     [SerializeField] Vector2 deathKick = new Vector2(10f, 10f);
-    // bool isAlive = true;
+    bool isAlive = true;
     float gravityScaleAtStart;
     void Start()
     {
@@ -36,19 +36,23 @@ public class PlayerMovenent : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // if(!isAlive) {return;}
         Run();
         FlipSprite();
         ClimbLadder();
+        Die();
     }
 
     void OnMove(InputValue value)
     {
+        // if(!isAlive) {return;}
         moveInput = value.Get<Vector2>();
         // Debug.Log(moveInput);
     }
 
     void Run()
     {
+        // if(!isAlive) {return;}
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed, rbd2.velocity.y);
         rbd2.velocity = playerVelocity;
 
@@ -59,11 +63,13 @@ public class PlayerMovenent : MonoBehaviour
 
     void OnFire(InputValue value)
     {
+        // if(!isAlive) {return;}
         Instantiate(playerBullet, playerGun.position, Quaternion.identity);
     }
 
     void OnJump(InputValue value)
     {
+        if(!isAlive) {return;}
         if(!myFeetCollider.IsTouchingLayers(LayerMask.GetMask("Ground")))
         {
             // this means stop executing this method
@@ -116,27 +122,24 @@ public class PlayerMovenent : MonoBehaviour
     }
 
 
-    void OnCollisionEnter2D(Collision2D other)
-    {
-        if(other.gameObject.tag == "Enemy" || other.gameObject.tag == "Hazard")
-        {
-            Die();
-        }
-    }
     void Die()
     {
-        // InputSystem.DisableAllEnabledActions();
+        if(myBodyCollider.IsTouchingLayers(LayerMask.GetMask("Enemies", "Hazards")))
+        {
+            isAlive = false;
+            myPlayerInput.enabled = false; //disable player's input
 
-        myPlayerInput.enabled = false; //disable player's input
+            myAnimator.SetTrigger("Dying"); //play dead animation 
 
-        myAnimator.SetTrigger("Dying"); //play dead animation 
+            rbd2.velocity = deathKick;
 
-        rbd2.velocity = deathKick;
+            // get rid off the player
+            myBodyCollider.enabled = false;
+            myFeetCollider.enabled = false;
+            // gameObject.layer = 11;
 
-        // get rid off the player
-        myBodyCollider.enabled = false;
-        myFeetCollider.enabled = false;
-        // gameObject.layer = 11;
+            FindObjectOfType<GameSession>().ProcessPlayerDeath();
+        }
     }
 }
 
